@@ -4,6 +4,7 @@ const allBookings = getBookings();
 const allVenues = getVenues();
 const allBands = getBands();
 
+//===========Creating function to find band name==========
 const assignedBandName = (singleBooking) => {
     let bandName = ""
 
@@ -14,7 +15,7 @@ const assignedBandName = (singleBooking) => {
     }
     return bandName
 }
-
+//===========Creating function to find venue name==========
 const assignedVenueName = (singleBooking) => {
     let venueName = ""
 
@@ -26,18 +27,35 @@ const assignedVenueName = (singleBooking) => {
     return venueName
 }
 
+//=============ClickEvent Listener===================
+
+document.addEventListener(
+    "click",
+    (clickEvent) => {
+        const itemClicked = clickEvent.target
+
+        if (itemClicked.id.startsWith("booking")) {
+            
+            const [,bandID] = itemClicked.id.split("--")
+
+            for (const band of allBands) {
+                if (band.id === parseInt(bandID)) {
+                    window.alert(`${band.name} \n${band.genre} \nFormed in ${band.yearFormed}\n${band.numOfMembers} band members`)
+                }
+            }
+        }
+    }
+)
 
 
-
+//===========Creating export function==================
 export const Bookings = () => {
     let bookingsHTML = "<ul class='bookingUL'>"
     
     for (const booking of allBookings) {
         const bName = assignedBandName(booking);
         const vName = assignedVenueName(booking);
-        console.log(bName);
-        console.log(vName);
-        bookingsHTML += `<li>${bName} are playing at ${vName} on ${booking.dateOfBooking}</li>`
+        bookingsHTML += `<li id="booking--${booking.bandId}">${bName} are playing at ${vName} on ${booking.dateOfBooking}</li>`
 }
 
 bookingsHTML += "</ul>"
