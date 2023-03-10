@@ -1,10 +1,26 @@
-import{ getBookings, getVenues, getBands } from "./database.js"
+import{ getBookings, getVenues, getBands, getbandMembers } from "./database.js"
 
 const allBookings = getBookings();
 const allVenues = getVenues();
 const allBands = getBands();
+const allBandMembers = getbandMembers();
+
+//Function to store band members
+const filterBandMembersByBand = (singleBand) => {
+    const bandMembers = []
+
+for (const bandMember of allBandMembers) {
+
+    if (bandMember.bandId === singleBand.id) {
+        bandMembers.push(`${bandMember.firstName} ${bandMember.LastName} (${bandMember.bandRole})\n`)
+        }
+ 
+    }
+    return bandMembers.join("")
+}
 
 
+//Function to store venue bookings
 const filterBookingsByBands = (singleBand) => {
     const venueBookings = []
 
@@ -18,13 +34,14 @@ for (const booking of allBookings) {
     return venueBookings
 }
 
+//Function to pull venue names
 const assignedVenueNames = (venueBookings) => {
     let venueNames = []
 
 for (const venueBooking of venueBookings) {
     for (const venue of allVenues) {
         if (venue.id === venueBooking.venueId)
-        venueNames.push(`${venue.name} \n `)
+        venueNames.push(`${venue.name}\n `)
     }
 }
 
@@ -46,8 +63,8 @@ if (itemClicked.id.startsWith("band")) {
         if (band.id === parseInt(bandId)){
         const bookings = filterBookingsByBands(band)
         const venues = assignedVenueNames(bookings)
-
-        window.alert(`${venues}`)
+        const members = filterBandMembersByBand(band)
+        window.alert(`${members}\nUpcoming shows:\n ${venues} \n`)
         }
     }
 }
